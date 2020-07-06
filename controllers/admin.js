@@ -63,7 +63,7 @@ exports.postAddProduct = (req, res, next) => {
     })
   } else {
     
-    const imageUrl  = path.join(__dirname , '..' ,image.path);
+    const imageUrl  = `app/${image.path}`;
     const product = new Product({
           title: title,
           price: price,
