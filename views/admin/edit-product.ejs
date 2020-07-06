@@ -1,0 +1,81 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+   <%- include('../includes/navigation.ejs') %>
+
+    <main>
+        <% if (errorMsg ) { %>
+        
+            <div class='user_message user_message--error'><%= errorMsg %> </div>
+        <% } %>
+        <form class="product-form" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST" enctype="multipart/form-data">
+            <div class="form-control">
+                <label for="title">Title</label>
+                <input
+                class="<%= validationErrors.find(cur=>cur.param === 'title')? 'wrongData' : '' %>" 
+                type="text" 
+                name="title" 
+                id="title" 
+                <% if (editing || hasError) { %>
+                    value="<%= product.title %>">
+               <% } %> 
+               
+            </div>
+            <!-- <div class="form-control">
+                <label for="imageUrl">Image URL</label>
+                <input 
+                class="<%= validationErrors.find(cur=>cur.param === 'imageUrl')? 'wrongData' : '' %>"
+                type="text" 
+                name="imageUrl" 
+                id="imageUrl" 
+                <% if (editing || hasError) { %>
+                    value="<%= product.imageUrl %>">
+                    
+                   <% } %>
+               
+            </div> -->
+
+            <div class="form-control">
+                <label for="image">image</label>
+                <input 
+                class="<%= validationErrors.find(cur=>cur.param === 'image')? 'wrongData' : '' %>"
+                type="file" 
+                name="image" 
+                id="image" > 
+                
+               
+            </div>
+            <div class="form-control">
+                <label for="price">Price</label>
+                <input 
+                class="<%= validationErrors.find(cur=>cur.param === 'price')? 'wrongData' : '' %>"
+                type="number" 
+                name="price" 
+                id="price" 
+                step="0.01" 
+                <% if (editing || hasError) { %>
+                    value="<%= product.price %>">
+                   
+                   <% } %>
+               
+                
+            </div>
+            <div class="form-control">
+                <label for="description">Description</label>
+                <textarea 
+                class="<%= validationErrors.find(cur=>cur.param === 'description')? 'wrongData' : '' %>"
+                name="description" 
+                id="description" 
+                rows="5"><% if (editing || hasError) { %><%= product.description %><% } %></textarea>
+            </div>
+            <% if (editing) { %>
+                <input type="hidden" value="<%= product._id %>" name="productId">
+            <% } %>
+            <input type="hidden"   name="_csrf"  value="<%= csrfToken %>">
+            <button class="btn" type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
+        </form>
+    </main>
+<%- include('../includes/end.ejs') %>

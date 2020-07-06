@@ -1,0 +1,12 @@
+<section class="pagination">
+    <% if (previous + 1  !== 1) { %>
+        <a class='paginationLinks'href="?page=<%= previous %>"><%= previous %></a>
+        <a class='active paginationLinks'' href="?=page<%= next-1 %>"><%= next -1 %></a>
+    <% } %>
+    <% if (next !== totalNumOfPages+1) { %>
+        <a class='paginationLinks'  href="?page=<%= next %>"><%= next %></a>
+        <% } %>
+        <% if (next !== totalNumOfPages && next !== totalNumOfPages+1) { %>
+          <a class='paginationLinks shape' href="?page=<%= totalNumOfPages %>"><%= totalNumOfPages %></a>
+            <% } %>
+</section>
