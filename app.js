@@ -115,7 +115,8 @@ app.use((error , req, res , next) =>{
       pageTitle: 'Server problem' , 
       path: '/500',
       errorMsg: error,
-      status: error.httpStatusCode
+      status: error.httpStatusCode,
+      isAuthenticated: false
     })
     } else {
       res.status(500).redirect('/500');
