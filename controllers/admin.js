@@ -1,4 +1,5 @@
 const Product = require('../models/product');
+const path = require('path');
 const { validationResult } = require('express-validator/check');
 
 const fileHelper = require('../util/file');
@@ -62,7 +63,7 @@ exports.postAddProduct = (req, res, next) => {
     })
   } else {
     
-    const imageUrl  = image.path;
+    const imageUrl  = path.join(__dirname , '..' ,image.path);
     const product = new Product({
           title: title,
           price: price,
