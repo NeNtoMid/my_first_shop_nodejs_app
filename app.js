@@ -60,7 +60,7 @@ app.set('views', 'views');
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const authRoutes = require('./routes/auth');
-const multerRoutes = require('./image-upload');
+
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname  , 'access.log') , {
     flags: 'a'
