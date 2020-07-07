@@ -70,7 +70,7 @@ exports.postAddProduct = (req, res, next) => {
    
       const s3 = new aws.S3();
       const fileName =  image.path.split("\\")[1];
-      const filetype = image.mimetype.split('/')[1];
+      const fileType = image.mimetype.split('/')[1];
       const s3Params = {
         Bucket: process.env.S3_BUCKET_NAME,
         Key: fileName,
