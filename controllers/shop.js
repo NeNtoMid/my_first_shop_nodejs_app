@@ -101,10 +101,11 @@ exports.getCart = (req, res, next) => {
     .populate('cart.items.productId')
     .execPopulate()
     .then(user => {
-        const products = user.cart.items;
+        const products = user.cart.items || [];
         console.log('products from cart:', products)
         let totalPrice = 0 ;
-        user.cart.items.forEach(element =>totalPrice+=parseFloat(element.productId.price * element.quantity));
+       
+         if(products) products.forEach(element =>totalPrice+=parseFloat(element.productId.price * element.quantity));
 
         res.render('shop/cart', {
         path: '/cart',
