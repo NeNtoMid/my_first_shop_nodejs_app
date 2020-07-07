@@ -4,7 +4,7 @@
   "description": "Complete Node.js Guide",
   "main": "app.js",
   "engines": {
-    "node":"12.18.0"
+    "node": "12.18.0"
   },
   "scripts": {
     "start": "NODE_ENV=production MONGO_USER=NeNtoMid MONGO_PASSWORD=89070701057Aa STRIPE_KEY=sk_test_51H0SwSLziRUenFpFKBTWYFtUvAcXTGh2gPMQjWv7ir9l2fhnKDx1ex1bwcckyjICfytmDW52hiaarfV0lRBzSKJF00tdZP79Q8 MONGO_DATABASE=shop node app.js",
@@ -17,6 +17,7 @@
     "nodemon": "^1.18.3"
   },
   "dependencies": {
+    "aws-sdk": "^2.710.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "compression": "^1.7.4",

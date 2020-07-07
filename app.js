@@ -13,11 +13,16 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 
+
 const errorController = require('./controllers/error');
 const User = require('./models/user');
 
 const MONGODB_URI =
 `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@database-ns317.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
+
+const S3_BUCKET = process.env.S3_BUCKET_NAME;
+
+
 
 const store = new MongoDBStore({
   uri: MONGODB_URI,

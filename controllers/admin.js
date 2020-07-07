@@ -6,6 +6,10 @@ const fileHelper = require('../util/file');
 
 const mongoose = require('mongoose');
 
+const aws = require('aws-sdk');
+
+aws.config.region = 'eu-central-1';
+
 exports.getAddProduct = (req, res, next) => {
    return  res.render('admin/edit-product', {
       pageTitle: 'Add Product',
@@ -62,8 +66,41 @@ exports.postAddProduct = (req, res, next) => {
       
     })
   } else {
+
+   
+      const s3 = new aws.S3();
+      const fileName =  image.path.split("\\")[1];
+      const filetype = image.mimetype.split('/')[1];
+      const s3Params = {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: fileName,
+        Expires: 100,
+        ContentType: fileType,
+        ACL: 'public-read'
+      };
     
-    const imageUrl  = `app/${image.path}`;
+      s3.getSignedUrl('putObject', s3Params, (err, data) => {
+        if(err){
+          console.log(err);
+          return res.end();
+        }
+        const returnData = {
+          signedRequest: data,
+          url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${fileName}`
+        };
+        res.write(JSON.stringify(returnData));
+        res.end();
+      });
+ 
+    console.log('req.file:', req.file)
+      
+      
+    console.log(' fileName:',  fileName)
+      
+    console.log('filetype:', filetype)
+      
+    const imageUrl  = image.path;
+      
     const product = new Product({
           title: title,
           price: price,
@@ -231,3 +268,5 @@ exports.deleteProduct = (req, res, next) => {
         });
 
 };
+
+
