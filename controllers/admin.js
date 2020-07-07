@@ -82,22 +82,16 @@ exports.postAddProduct = (req, res, next) => {
       s3.getSignedUrl('putObject', s3Params, (err, data) => {
         if(err){
           console.log(err);
-          return res.end();
+          
         }
         const returnData = {
           signedRequest: data,
           url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${fileName}`
         };
-        res.write(JSON.stringify(returnData));
-        res.end();
+        console.log(returnData);
       });
  
-    console.log('req.file:', req.file)
-      
-      
-    console.log(' fileName:',  fileName)
-      
-    console.log('filetype:', filetype)
+    
       
     const imageUrl  = image.path;
       

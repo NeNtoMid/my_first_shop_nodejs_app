@@ -3,6 +3,9 @@
         "MONGO_USER":"NeNtoMid",
         "MONGO_PASSWORD":"89070701057Aa",
         "STRIPE_KEY":"sk_test_51H0SwSLziRUenFpFKBTWYFtUvAcXTGh2gPMQjWv7ir9l2fhnKDx1ex1bwcckyjICfytmDW52hiaarfV0lRBzSKJF00tdZP79Q8",
-        "MONGO_DATABASE":"shop"
+        "MONGO_DATABASE":"shop",
+        "S3_BUCKET_NAME":"imagesnentomid",
+        "AWS_ACCESS_KEY_ID":"AKIAXN5KF663THKZZTOK",
+        "AWS_SECRET_ACCESS_KEY":"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"
     }
 }
