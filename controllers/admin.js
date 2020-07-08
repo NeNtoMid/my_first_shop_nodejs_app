@@ -97,7 +97,7 @@ exports.postAddProduct = (req, res, next) => {
       });
     });
       
-    const imageUrl  = image.path;
+    const imageUrl  = `https://imagesfornento.s3.amazonaws.com/${keyName}`;
       
     const product = new Product({
           title: title,
