@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 const AWS = require('aws-sdk');
 
-const bucketName = 'imagesfornento';
+const bucketName = process.env.bucketName;
 
 
 
@@ -70,9 +70,10 @@ exports.postAddProduct = (req, res, next) => {
   } else {
 
     const s3 = new AWS.S3({
-      accessKeyId: 'AKIAJJGKP5UJ7K3NRAVQ',
-      secretAccessKey: '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'
+      accessKeyId: process.env.accessKeyId,
+      secretAccessKey: process.env.secretAccessKey
     });
+    
 
     const keyName = req.file.originalname;
     const body = req.file.buffer;

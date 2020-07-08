@@ -36,21 +36,21 @@ const csrfProtection = csrf();
 
 
 
-const bucketName = 'imagesfornento';
+const bucketName = process.env.bucketName;
 
 const multerS3 = require('multer-s3')
 
 const AWS = require('aws-sdk');
 
 const s3 = new AWS.S3({
-  accessKeyId: 'AKIAJJGKP5UJ7K3NRAVQ',
-  secretAccessKey: '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'
+  accessKeyId: process.env.accessKeyId,
+  secretAccessKey: process.env.secretAccessKey
 });
 
 const upload = multer({
   storage: multerS3({
     s3: s3,
-    bucket: 'imagesfornento',
+    bucket: bucketName,
     
     metadata: function (req, file, cb) {
       cb(null, {fieldName: file.fieldname});
