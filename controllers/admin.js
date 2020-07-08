@@ -6,9 +6,11 @@ const fileHelper = require('../util/file');
 
 const mongoose = require('mongoose');
 
-const aws = require('aws-sdk');
+const AWS = require('aws-sdk');
 
-aws.config.region = 'eu-central-1';
+const bucketName = 'imagesfornento';
+
+
 
 exports.getAddProduct = (req, res, next) => {
    return  res.render('admin/edit-product', {
@@ -67,31 +69,32 @@ exports.postAddProduct = (req, res, next) => {
     })
   } else {
 
-   
-      const s3 = new aws.S3();
-      const fileName =  image.path.split("\\")[1];
-      const fileType = image.mimetype.split('/')[1];
-      const s3Params = {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: fileName,
-        Expires: 100,
-        ContentType: fileType,
-        ACL: 'public-read'
-      };
-    
-      s3.getSignedUrl('putObject', s3Params, (err, data) => {
-        if(err){
-          console.log(err);
-          
-        }
-        const returnData = {
-          signedRequest: data,
-          url: `https://${process.env.S3_BUCKET_NAME}.s3.amazonaws.com/${fileName}`
-        };
-        console.log(returnData);
-      });
+    const s3 = new AWS.S3({
+      accessKeyId: 'AKIAJJGKP5UJ7K3NRAVQ',
+      secretAccessKey: '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'
+    });
+
+    const keyName = req.file.originalname;
+    const body = req.file.buffer;
  
+    console.log('req.file:', req.file);
+    console.log('keyName:', keyName);
+    console.log('body:', body)
     
+    s3.createBucket({Bucket: bucketName}, () => {
+
+      const params = {
+        Bucket: bucketName, 
+        Key: keyName, 
+        Body: body
+      };
+
+      s3.putObject(params, (err, data) => {
+          if (err) console.log(err);
+          else console.log("Successfully uploaded data to " + bucketName + "/" + keyName);
+          
+      });
+    });
       
     const imageUrl  = image.path;
       
@@ -101,7 +104,7 @@ exports.postAddProduct = (req, res, next) => {
           description: description,
           imageUrl: imageUrl,
           userId: req.user
-  });
+    });
   return  product
     .save()
     .then(result => {

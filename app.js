@@ -36,21 +36,32 @@ const csrfProtection = csrf();
 
 
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file , cb) => {
-      cb(null  , `images`)
-  },
-  filename: (req, file , cb) => {
-    
-    cb(null  , `${Date.now()}-${file.originalname}`)
-  }
+const bucketName = 'imagesfornento';
+
+const multerS3 = require('multer-s3')
+
+const AWS = require('aws-sdk');
+
+const s3 = new AWS.S3({
+  accessKeyId: 'AKIAJJGKP5UJ7K3NRAVQ',
+  secretAccessKey: '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'
 });
 
-const fileFilter = (req,file,cb) => {
-  const typeOfFile = file.mimetype.split('/')[1];
-  typeOfFile === 'jpeg' || typeOfFile === 'png' || typeOfFile === 'jpg'?  cb(null , true) : cb(null , false);
+const upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'imagesfornento',
+    
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString())
+    }
+  })
+});
 
-};
+
 
 
 
@@ -63,14 +74,14 @@ const authRoutes = require('./routes/auth');
 
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname  , 'access.log') , {
-    flags: 'a'
+  flags: 'a'
 })
 
 app.use(helmet());
 app.use(compression());
 app.use(morgan('combined',{stream: accessLogStream}));
 
-app.use(multer({storage: fileStorage , fileFilter: fileFilter }).single('image'))
+app.use(multer().single('image'));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
@@ -90,29 +101,29 @@ app.use(
   })
   );
   
-app.use(csrfProtection);
-
-
-
-app.use((req,res,next)=>{
+  app.use(csrfProtection);
+  
+  
+  
+  app.use((req,res,next)=>{
     res.locals.isAuthenticated = req.session.isLoggedIn;
     res.locals.csrfToken = req.csrfToken();
     next();
-});
-
-app.use((req, res, next) => {
-  if (!req.session.user) {
-    return next();
+  });
+  
+  app.use((req, res, next) => {
+    if (!req.session.user) {
+      return next();
   }
   User.findById(req.session.user._id)
-    .then(user => {
-      if(!user) return next();
-      req.user = user;
-      next();
-    })
-    .catch(err =>{
-      return next(new Error(err));
-    });
+  .then(user => {
+    if(!user) return next();
+    req.user = user;
+    next();
+  })
+  .catch(err =>{
+    return next(new Error(err));
+  });
 });
 
 app.use(flash());
@@ -125,25 +136,41 @@ app.get('/500',errorController.get500);
 
 app.use(errorController.get404);
 
-// app.use((error , req, res , next) =>{
-//     if(error){
-//     return res.status(500).render('500' , {
-//       pageTitle: 'Server problem' , 
-//       path: '/500',
-//       errorMsg: error,
-//       status: error.httpStatusCode,
-//       isAuthenticated:  false
-//     })
-//     } else {
-//       res.status(500).redirect('/500');
-//     }
-// })
+app.use((error , req, res , next) =>{
+      if(error){
+        return res.status(500).render('500' , {
+            pageTitle: 'Server problem' , 
+            path: '/500',
+            errorMsg: error,
+            status: error.httpStatusCode,
+            isAuthenticated:  false
+          })
+          } else {
+              res.status(500).redirect('/500');
+    }
+})
 
 mongoose
-  .connect(MONGODB_URI)
-  .then(result => {
-    app.listen(process.env.PORT || 3000);
-  })
-  .catch(err => {
-    console.log(err);
-  });
+.connect(MONGODB_URI)
+.then(result => {
+  app.listen(process.env.PORT || 3000);
+})
+.catch(err => {
+  console.log(err);
+});
+
+// const fileStorage = multer.diskStorage({
+//   destination: (req, file , cb) => {
+//       cb(null  , `images`)
+//   },
+//   filename: (req, file , cb) => {
+    
+//     cb(null  , `${Date.now()}-${file.originalname}`)
+//   }
+// });
+
+// const fileFilter = (req,file,cb) => {
+//   const typeOfFile = file.mimetype.split('/')[1];
+//   typeOfFile === 'jpeg' || typeOfFile === 'png' || typeOfFile === 'jpg'?  cb(null , true) : cb(null , false);
+
+// };
