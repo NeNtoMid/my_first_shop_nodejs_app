@@ -252,13 +252,27 @@ exports.deleteProduct = (req, res, next) => {
  return Product.findById(prodId)
         .then(product => {
           if(!product) return next(new Error('Product not found'));
-          return fileHelper(product.imageUrl);
+          
+          const s3 = new AWS.S3({
+            accessKeyId: process.env.ACCESS_KEY_ID,
+              secretAccessKey: process.env.SECRET_ACCESS_KEY
+            });
+
+          const fileName = product.imageUrl.split('.com/')[1];
+            
+          const  params = {  Bucket: bucketName, Key:fileName };
+
+        return s3.deleteObject(params,  (err, data)  =>{
+            if (err) console.log(err);
+            else     console.log();                 // deleted
+          });
         })
         .then(() => {
           return Product.deleteOne({_id :prodId , userId :req.user._id})
         })
         .then(() => {
           console.log('DESTROYED PRODUCT');
+         
           res.status(200).json({message:'Success!!'})
         })
         .catch(err => {
