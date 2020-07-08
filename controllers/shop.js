@@ -105,7 +105,7 @@ exports.getCart = (req, res, next) => {
         console.log('products from cart:', products)
         let totalPrice = 0 ;
        
-         if(products) products.forEach(element =>totalPrice+=parseFloat(element.productId.price * element.quantity));
+         if(products.length > 0 ) products.forEach(element =>totalPrice+=parseFloat(element.productId.price * element.quantity));
 
         res.render('shop/cart', {
         path: '/cart',
@@ -192,11 +192,14 @@ exports.getOrders = (req, res, next) => {
           totalPriceOfOrder: 0,
           priceWithOutQty: [] ,
         } ;
-        cur.products.forEach((element,i) => {
-          totalPrices[index].totalPriceOfOrder+=parseFloat(element.product.price * element.quantity);
-          totalPrices[index].priceWithOutQty.push(parseFloat(element.product.price));
-         
-        });
+        if(cur.products.length > 0 ){
+
+          cur.products.forEach((element,i) => {
+            totalPrices[index].totalPriceOfOrder+=parseFloat(element.product.price * element.quantity);
+            totalPrices[index].priceWithOutQty.push(parseFloat(element.product.price));
+           
+          });
+        }
 
 
 
