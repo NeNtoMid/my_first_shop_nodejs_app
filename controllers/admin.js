@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 const AWS = require('aws-sdk');
 
-const bucketName = process.env.bucketName;
+const bucketName = process.env.BUCKET_NAME;
 
 
 
@@ -70,8 +70,8 @@ exports.postAddProduct = (req, res, next) => {
   } else {
 
     const s3 = new AWS.S3({
-      accessKeyId: process.env.accessKeyId,
-      secretAccessKey: process.env.secretAccessKey
+      accessKeyId: process.env.ACCESS_KEY_ID,
+      secretAccessKey: process.env.SECRET_ACCESS_KEY
     });
     
 

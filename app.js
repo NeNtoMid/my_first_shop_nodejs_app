@@ -36,16 +36,19 @@ const csrfProtection = csrf();
 
 
 
-const bucketName = process.env.bucketName;
+const bucketName = process.env.BUCKET_NAME;
+console.log('bucketName:', bucketName);
 
-const multerS3 = require('multer-s3')
+const multerS3 = require('multer-s3');
 
 const AWS = require('aws-sdk');
+console.log('process.env.ACCESS_KEY_ID:', process.env.ACCESS_KEY_ID);
 
 const s3 = new AWS.S3({
-  accessKeyId: process.env.accessKeyId,
-  secretAccessKey: process.env.secretAccessKey
+  accessKeyId: process.env.ACCESS_KEY_ID,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY
 });
+
 
 const upload = multer({
   storage: multerS3({
