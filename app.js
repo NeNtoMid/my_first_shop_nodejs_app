@@ -177,3 +177,6 @@ mongoose
 //   typeOfFile === 'jpeg' || typeOfFile === 'png' || typeOfFile === 'jpg'?  cb(null , true) : cb(null , false);
 
 // };
+
+
+// "start": "NODE_ENV=production MONGO_USER=NeNtoMid MONGO_PASSWORD=89070701057Aa STRIPE_KEY=sk_test_51H0SwSLziRUenFpFKBTWYFtUvAcXTGh2gPMQjWv7ir9l2fhnKDx1ex1bwcckyjICfytmDW52hiaarfV0lRBzSKJF00tdZP79Q8 MONGO_DATABASE=shop node app.js",
